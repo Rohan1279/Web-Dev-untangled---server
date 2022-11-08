@@ -9,8 +9,7 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}
-@cluster0.tulr71e.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.wvywou5.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -19,9 +18,17 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    
+    const servicesCollection = client
+      .db("webDevUntangled")
+      .collection("services");
+    //read
+    app.get("/", async (req, res) => {
+      const query = {};
+      const cursor = servicesCollection.find(query);
+      const services = await cursor.limit(3).toArray();
+      res.send(services);
+    });
   } finally {
-  
   }
 }
 run().catch((err) => console.log(err));
