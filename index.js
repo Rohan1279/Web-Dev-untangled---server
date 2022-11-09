@@ -21,6 +21,11 @@ async function run() {
     const servicesCollection = client
       .db("webDevUntangled")
       .collection("services");
+
+    const serviceReviewCollection = client
+      .db("webDevUntangled")
+      .collection("reviews");
+
     //read for home page
     app.get("/", async (req, res) => {
       const query = {};
@@ -35,12 +40,24 @@ async function run() {
       const services = await cursor.toArray();
       res.send(services);
     });
-    //read for services page
+    //read for service detail
     app.get("/service/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const service = await servicesCollection.findOne(query);
       res.send(service);
+    });
+    // create service for add service
+    app.post("/services", async (req, res) => {
+      const service = req.body;
+      const result = await servicesCollection.insertOne(service);
+      res.send(result);
+    });
+    //create review for service detail page
+    app.post("/reviews", async (req, res) => {
+      const review = req.body;
+      const result = await serviceReviewCollection.insertOne(review);
+      res.send(result);
     });
   } finally {
   }
