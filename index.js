@@ -59,6 +59,15 @@ async function run() {
       const result = await serviceReviewCollection.insertOne(review);
       res.send(result);
     });
+    // //read for service review section
+    // app.get("/reviews/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   const query = { service_id: id };
+    //   const cursor = serviceReviewCollection.find(query);
+    //   const reviews = await cursor.toArray();
+    //   res.send(reviews);
+    // });
+    //read for service review section
     app.get("/reviews", async (req, res) => {
       let query = {};
       if (req.query.service_id) {
@@ -71,7 +80,7 @@ async function run() {
           user_email: req.query.email,
         };
       }
-      const cursor = serviceReviewCollection.find(query);
+      const cursor = serviceReviewCollection.find(query).sort({ date: -1 });
 
       const reviews = await cursor.toArray();
       res.send(reviews);
