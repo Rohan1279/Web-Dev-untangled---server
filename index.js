@@ -53,12 +53,30 @@ async function run() {
       const result = await servicesCollection.insertOne(service);
       res.send(result);
     });
-    //create review for service detail page
+    //create review for service detail section
     app.post("/reviews", async (req, res) => {
       const review = req.body;
       const result = await serviceReviewCollection.insertOne(review);
       res.send(result);
     });
+    app.get("/reviews", async (req, res) => {
+      let query = {};
+      if (req.query.service_id) {
+        query = {
+          service_id: req.query.service_id,
+        };
+      }
+      if (req.query.email) {
+        query = {
+          user_email: req.query.email,
+        };
+      }
+      const cursor = serviceReviewCollection.find(query);
+
+      const reviews = await cursor.toArray();
+      res.send(reviews);
+    });
+    // read for my review route
   } finally {
   }
 }
