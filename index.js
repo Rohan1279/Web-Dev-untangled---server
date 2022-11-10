@@ -5,6 +5,7 @@ const port = process.env.port || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
+
 //middleware
 app.use(cors());
 app.use(express.json());
@@ -94,8 +95,6 @@ async function run() {
     });
     // update for my review route
     app.patch("/reviews/:id", async (req, res) => {
-        console.log(req.params)
-        console.log(req.body)
       const id = req.params.id;
       const updatedReview = req.body.updatedReview;
       const query = { _id: ObjectId(id) };
