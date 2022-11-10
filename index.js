@@ -92,6 +92,22 @@ async function run() {
       const result = await serviceReviewCollection.deleteOne(query);
       res.send(result);
     });
+    // update for my review route
+    app.patch("/reviews/:id", async (req, res) => {
+        console.log(req.params)
+        console.log(req.body)
+      const id = req.params.id;
+      const updatedReview = req.body.updatedReview;
+      const query = { _id: ObjectId(id) };
+      const updatedDoc = {
+        $set: {
+          reviewText: updatedReview,
+        },
+      };
+      const result = await serviceReviewCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    // console.log(result);
+    });
   } finally {
   }
 }
